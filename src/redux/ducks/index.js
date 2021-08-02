@@ -1,4 +1,5 @@
 import { State } from 'react-native-ble-plx';
+import { formatCurrentDate } from '../../#services/Dates';
 
 //Actions Type
 const SET_BLE_MANAGER = 'SET_BLE_MANAGER';
@@ -34,21 +35,30 @@ function reducer(state = initialState, action) {
     case 'SCAN_ERRORS':
       return {
         ...state,
-        logs: ['Scan error: ' + action.error, ...state.logs]
+        logs: [{
+          text: 'Scan error: ' + action.error,
+          date: formatCurrentDate()
+        }, ...state.logs]
       };
 
     case 'UPDATE_CONNECTION_STATE':
       return {
         ...state,
         connectionState: action.state,
-        logs: ['Connection state changed: ' + action.state, ...state.logs],
+        logs: [{
+          text: 'Connection state changed: ' + action.state,
+          date: formatCurrentDate()
+        }, ...state.logs]
       };
 
     case 'BLE_STATE_UPDATED':
       return {
         ...state,
         bleState: action.state,
-        logs: ['BLE state changed: ' + action.state, ...state.logs],
+        logs: [{
+          text: 'BLE state changed: ' + action.state,
+          date: formatCurrentDate()
+        }, ...state.logs]
       };
 
     default:

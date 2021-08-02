@@ -16,7 +16,7 @@ const Home = ({ navigation }) => {
   const [dataDevices, setDataDevices] = useState([]);
 
   /*Redux*/
-  const { bleManager, bleState } = useSelector(state => state);
+  const { bleManager, bleState, logs } = useSelector(state => state);
   const dispatch = useDispatch();
 
   const { scanErrors } = actions;
@@ -24,6 +24,7 @@ const Home = ({ navigation }) => {
   /*Redux*/
 
   useEffect(() => {
+    
   }, []);
 
   const onScanDevices = async () => {
