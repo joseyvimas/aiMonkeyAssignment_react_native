@@ -79,11 +79,15 @@ const Home = ({ navigation }) => {
       style={styles.container}
     >
       <Header
+        // leftComponent={() => {
+        //   return {
+            
+        //   }
+        // }}
         titleText='JoCy connect'
-        existRightComponent={() => {
+        rightComponent={() => {
           if (bleState === "PoweredOn") {
             return {
-              show: bleState === "PoweredOn",
               props: {
                 onPress: onScanDevices
               },

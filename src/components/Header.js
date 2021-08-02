@@ -5,7 +5,9 @@ import { Header } from 'react-native-elements';
 
 import Feather from 'react-native-vector-icons/Feather';
 
-const HeaderComponent = ({ titleText, navigation, existRightComponent }) => {
+const HeaderComponent = ({ titleText, navigation, rightComponent }) => {
+  if(rightComponent) rightComponent = rightComponent();
+  
   return (
     <>
       <StatusBar barStyle='dark-content' />
@@ -23,10 +25,10 @@ const HeaderComponent = ({ titleText, navigation, existRightComponent }) => {
         }}
         centerComponent={<Text style={styles.headerTextStyle}>{titleText}</Text>}
         rightComponent={() => {
-          if (existRightComponent()) {
+          if (rightComponent) {
             return (
-              <TouchableOpacity style={styles.rightComponent} {...existRightComponent().props}>
-                <Text style={{ color: 'white' }}>{existRightComponent().title}</Text>
+              <TouchableOpacity style={styles.rightComponent} {...rightComponent.props}>
+                <Text style={{ color: 'white' }}>{rightComponent.title}</Text>
               </TouchableOpacity>
             )
           }
