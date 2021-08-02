@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text, StatusBar } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, StatusBar } from 'react-native';
+import PropTypes from 'prop-types';
 import { Header } from 'react-native-elements';
 
 import Feather from 'react-native-vector-icons/Feather';
 
-function HeaderComponent({ titleText, navigation, existRightComponent }) {
+const HeaderComponent = ({ titleText, navigation, existRightComponent }) => {
   return (
     <>
-      {/* <SafeAreaView> */}
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle='dark-content' />
       <Header
+        backgroundColor='#133ebf'
         containerStyle={styles.headerContainer}
         leftComponent={() => {
           if (navigation) {
@@ -24,7 +25,7 @@ function HeaderComponent({ titleText, navigation, existRightComponent }) {
         rightComponent={() => {
           if (existRightComponent) {
             return (
-              <TouchableOpacity onPress={existRightComponent.onPress}>
+              <TouchableOpacity style={styles.rightComponent} onPress={existRightComponent.onPress}>
                 <Text style={{ color: 'white' }}>{existRightComponent.title}</Text>
               </TouchableOpacity>
             )
@@ -32,8 +33,6 @@ function HeaderComponent({ titleText, navigation, existRightComponent }) {
         }}
         placement='left'
       />
-      {/* </SafeAreaView> */}
-      
     </>
   )
 }
@@ -43,21 +42,21 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         paddingTop: 0,
-        backgroundColor: '#133ebf',
       },
       android: {
-        backgroundColor: '#133ebf',
+        height: 100
       },
-    })
+    }),
+    
   },
   headerTextStyle: {
-    fontSize: 15,
+    fontSize: 20,
     color: 'white',
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginLeft: -10,
   },
   goBackArrow: {
-    position: "absolute",
+    position: 'absolute',
     top: 55,
     left: 17,
     zIndex: 3,
@@ -66,6 +65,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white'
   },
+  rightComponent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1
+  }
 });
+
+HeaderComponent.propTypes = {
+  titleText: PropTypes.string.isRequired,
+  navigation: PropTypes.func,
+  existRightComponent: PropTypes.object
+};
 
 export default HeaderComponent;

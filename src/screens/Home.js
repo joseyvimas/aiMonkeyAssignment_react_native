@@ -2,40 +2,42 @@ import React, { useEffect, useState } from 'react';
 
 import {
   StyleSheet,
-  Text,
   View,
-  FlatList,
   Platform,
   PermissionsAndroid
 } from 'react-native';
 
-import { BleManager } from "react-native-ble-plx";
-
-import Feather from "react-native-vector-icons/Feather";
-
-import { List } from 'react-native-paper';
-
-import { Button } from 'react-native-elements';
+import { BleManager } from 'react-native-ble-plx';
 
 import Header from '../components/Header';
+import SnackbarComponent from '../components/Snackbar';
+import AllDevices from './AllDevices';
+
+import { useSelector } from 'react-redux';
 
 const Home = ({ navigation }) => {
-  const bleManager = new BleManager();
-  const [devicesExist, setDevicesExist] = useState(false);
-  const [titleAction, setTitleAction] = useState("SCAN");
+  const [bleManager, setBleManager] = useState(null);
+  const [titleAction, setTitleAction] = useState('SCAN');
+  const [dataDevices, setDataDevices] = useState([]);
+  const [textNotification, setTextNotification] = useState(null);
+  const state = useSelector(state => state);
 
   useEffect(() => {
+
+    console.log(state);
+    const newBleManager = new BleManager();
+    setBleManager(newBleManager)
     if (Platform.OS === 'android' && Platform.Version >= 23) {
       PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
         if (result) {
-          console.log("Permission is OK");
+          console.log('Permission is OK');
           // this.retrieveConnected()
         } else {
           PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
             if (result) {
-              console.log("User accept");
+              console.log('User accept');
             } else {
-              console.log("User refuse");
+              console.log('User refuse');
             }
           });
         }
@@ -44,38 +46,87 @@ const Home = ({ navigation }) => {
   }, []);
 
   const onScanDevices = async () => {
-    if (titleAction === "SCAN") {
-      setTitleAction("STOP SCANNING");
+    setTextNotification(null);
+    if (titleAction === 'SCAN') {
+      const data_devices = {};
+      setTitleAction('STOP SCANNING');
       bleManager.startDeviceScan(null, null, (error, device) => {
-        console.log("Scanning...");
         if (null) {
-          console.log('null')
+          setDataDevices([]);
+          console.log('null');
         }
         if (error) {
-          console.log("error", error);
-          // this.alert("Error in scan=> "+error)
-          // this.setState({text1:""})
-          // this.manager.stopDeviceScan();
-          setTitleAction("SCAN");
+          console.log('error', error.message);
+          setDataDevices([]);
+          setTextNotification(error.message);
+          setTitleAction('SCAN');
           bleManager.stopDeviceScan();
           return;
         }
-        console.log(Object.keys(device));
-        console.log(device["manufacturerData"])
-        console.log(device["serviceUUIDs"]);
-        // if(device["serviceUUIDs"]) {
-        //   const data_devices = [];
-        //   bleManager.stopDeviceScan();
-        //   bleManager.discoverAllServicesAndCharacteristicsForDevice(device.serviceUUIDs[0]).then((result) => {
-        //     console.log(result);
-        //   })
-
-        // }
+        data_devices[device.id] = {
+          id: device['id'],
+          name: device['name'],
+          id_services: device['serviceUUIDs'],
+          isConnectable: device['isConnectable']
+        }
+        setDataDevices(Object.values(data_devices));
       });
+
     }
-    else{
-      setTitleAction("SCAN");
+    else {
+      setTitleAction('SCAN');
       bleManager.stopDeviceScan();
+    }
+  }
+
+  const getServicesAndCharacteristics = (device) => {
+    return new Promise((resolve, reject) => {
+        device.services().then(services => {
+            const data_services = {}
+            services.forEach((service, i) => {
+              console.log(Object.keys(service))
+                service.characteristics().then(characteristics => {
+                  // console.log("service.characteristics")
+                    // console.log(c)
+                    // characteristics.push(c)
+                    // console.log(characteristics)
+                    data_services[service.uuid] = {
+                      name: service.name,
+                      uuid: service.uuid,
+                      characteristics: characteristics
+                    }
+                    resolve(data_services)
+                    // if (i === services.length - 1) {
+                    //     const temp = characteristics.reduce(
+                    //         (acc, current) => {
+                    //             return [...acc, ...current]
+                    //         },
+                    //         []
+                    //     )
+                    //     const dialog = temp.find(
+                    //         characteristic =>
+                    //             characteristic.isWritableWithoutResponse
+                    //     )
+                    //     if (!dialog) {
+                    //         reject('No writable characteristic')
+                    //     }
+                    //     resolve(dialog)
+                    // }
+                  
+                })
+            });
+            
+        })
+    })
+}
+
+  const connectDevice = async (id) => {
+    try{
+      const resultConnect = await bleManager.connectToDevice(id);
+      console.log(resultConnect);
+    }
+    catch(error){
+      console.error(error);
     }
   }
 
@@ -93,58 +144,18 @@ const Home = ({ navigation }) => {
         }
       />
 
-      {/* <Button
-        title='Scan'
-        buttonStyle={styles.buttonStyle}
-        containerStyle={styles.buttonContainerStyle}
-        iconPosition="right"
-        icon={<Feather name="search" size={20} color="white" style={{ paddingLeft: 10 }} />}
-        titleStyle={{ color: 'white' }}
-        onPress={() => {
-          onScanDevices();
+      {textNotification && <SnackbarComponent
+        text={textNotification}
+        customStyles={{
+          backgroundColor: '#F16043',
+          color: 'white'
         }}
-      /> */}
+      />}
 
-
-      {devicesExist ?
-        (
-          <View style={styles.devices}>
-            <Text style={{ fontSize: 16, marginBottom: 10 }}>
-              All devices
-            </Text>
-            <FlatList
-              data={["Prueba", "Prueba 2"]}
-              renderItem={({ item }) => (
-                <List.Item
-                  onPress={() => { }}
-                  title={item}
-                  titleStyle={styles.listTitle}
-                  left={props => <List.Icon {...props} icon="bluetooth" />}
-                // onPress={() => deleteNote(item.id)}
-                />
-              )}
-              keyExtractor={item => item}
-            />
-          </View>
-        ) :
-        (
-          <View style={{
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            flex: 1
-          }}>
-            <Feather
-              name="bluetooth"
-              size={40}
-              color="gray"
-            />
-            <Text style={{ marginTop: 10, fontSize: 16, color: "gray" }}>
-              No devices found.
-            </Text>
-          </View>
-        )
-      }
+      <AllDevices
+        dataDevices={dataDevices}
+        connectDevice={connectDevice}
+      />
     </View>
   );
 };
@@ -174,5 +185,11 @@ const styles = StyleSheet.create({
   },
   listTitle: {
     fontSize: 15
+  },
+  noDevices: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1
   }
 });
