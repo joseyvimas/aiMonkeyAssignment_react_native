@@ -23,10 +23,10 @@ const HeaderComponent = ({ titleText, navigation, existRightComponent }) => {
         }}
         centerComponent={<Text style={styles.headerTextStyle}>{titleText}</Text>}
         rightComponent={() => {
-          if (existRightComponent) {
+          if (existRightComponent()) {
             return (
-              <TouchableOpacity style={styles.rightComponent} {...existRightComponent.props}>
-                <Text style={{ color: 'white' }}>{existRightComponent.title}</Text>
+              <TouchableOpacity style={styles.rightComponent} {...existRightComponent().props}>
+                <Text style={{ color: 'white' }}>{existRightComponent().title}</Text>
               </TouchableOpacity>
             )
           }
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 HeaderComponent.propTypes = {
   titleText: PropTypes.string.isRequired,
   navigation: PropTypes.func,
-  existRightComponent: PropTypes.object
+  existRightComponent: PropTypes.func
 };
 
 export default HeaderComponent;

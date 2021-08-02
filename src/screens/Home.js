@@ -24,7 +24,7 @@ const Home = ({ navigation }) => {
   /*Redux*/
 
   useEffect(() => {
-    
+
   }, []);
 
   const onScanDevices = async () => {
@@ -66,7 +66,7 @@ const Home = ({ navigation }) => {
 
   const connectDevice = async (id) => {
     try {
-      const resultConnect = await bleManager.connectToDevice(id);
+      const resultConnect = await bleManager.connectToDevice(id, { autoConnect: true });
       console.log(resultConnect);
     }
     catch (error) {
@@ -80,18 +80,20 @@ const Home = ({ navigation }) => {
     >
       <Header
         titleText='JoCy connect'
-        existRightComponent={
-          {
-            props: {
-              onPress: onScanDevices,
-              disabled: bleState !== "PoweredOn"
-            },
-            title: titleAction
+        existRightComponent={() => {
+          if (bleState === "PoweredOn") {
+            return {
+              show: bleState === "PoweredOn",
+              props: {
+                onPress: onScanDevices
+              },
+              title: titleAction
+            }
           }
-        }
+        }}
       />
 
-      {bleState !== "Unknown" && bleState !== "PoweredOn" && 
+      {bleState !== "Unknown" && bleState !== "PoweredOn" &&
         <SnackbarComponent
           text={BleStateErrors[bleState]}
           customStyles={{
