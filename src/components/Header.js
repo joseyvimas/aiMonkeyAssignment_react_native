@@ -25,7 +25,7 @@ const HeaderComponent = ({ titleText, navigation, existRightComponent }) => {
         rightComponent={() => {
           if (existRightComponent) {
             return (
-              <TouchableOpacity style={styles.rightComponent} onPress={existRightComponent.onPress}>
+              <TouchableOpacity style={styles.rightComponent} {...existRightComponent.props}>
                 <Text style={{ color: 'white' }}>{existRightComponent.title}</Text>
               </TouchableOpacity>
             )

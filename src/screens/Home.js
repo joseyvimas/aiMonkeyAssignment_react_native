@@ -1,55 +1,37 @@
 import React, { useEffect, useState } from 'react';
 
-import {
-  StyleSheet,
-  View,
-  Platform,
-  PermissionsAndroid
-} from 'react-native';
-
-import { BleManager } from 'react-native-ble-plx';
+import { StyleSheet, View } from 'react-native';
 
 import Header from '../components/Header';
 import SnackbarComponent from '../components/Snackbar';
 import AllDevices from './AllDevices';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { actions } from '../redux/ducks/index';
+
+import { BleStateErrors } from '../constants/BleStateErrors';
 
 const Home = ({ navigation }) => {
-  const [bleManager, setBleManager] = useState(null);
   const [titleAction, setTitleAction] = useState('SCAN');
   const [dataDevices, setDataDevices] = useState([]);
-  const [textNotification, setTextNotification] = useState(null);
-  const state = useSelector(state => state);
+
+  /*Redux*/
+  const { bleManager, bleState } = useSelector(state => state);
+  const dispatch = useDispatch();
+
+  const { scanErrors } = actions;
+  const scanErrorsDispatch = (error) => dispatch(scanErrors(error));
+  /*Redux*/
 
   useEffect(() => {
-
-    console.log(state);
-    const newBleManager = new BleManager();
-    setBleManager(newBleManager)
-    if (Platform.OS === 'android' && Platform.Version >= 23) {
-      PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
-        if (result) {
-          console.log('Permission is OK');
-          // this.retrieveConnected()
-        } else {
-          PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
-            if (result) {
-              console.log('User accept');
-            } else {
-              console.log('User refuse');
-            }
-          });
-        }
-      });
-    }
   }, []);
 
   const onScanDevices = async () => {
-    setTextNotification(null);
     if (titleAction === 'SCAN') {
       const data_devices = {};
       setTitleAction('STOP SCANNING');
+
+      //Listening devices scan
       bleManager.startDeviceScan(null, null, (error, device) => {
         if (null) {
           setDataDevices([]);
@@ -57,12 +39,14 @@ const Home = ({ navigation }) => {
         }
         if (error) {
           console.log('error', error.message);
+          scanErrorsDispatch(error.message); //Save scan error with Redux
           setDataDevices([]);
-          setTextNotification(error.message);
           setTitleAction('SCAN');
           bleManager.stopDeviceScan();
           return;
         }
+
+        //Saving devices data
         data_devices[device.id] = {
           id: device['id'],
           name: device['name'],
@@ -79,53 +63,12 @@ const Home = ({ navigation }) => {
     }
   }
 
-  const getServicesAndCharacteristics = (device) => {
-    return new Promise((resolve, reject) => {
-        device.services().then(services => {
-            const data_services = {}
-            services.forEach((service, i) => {
-              console.log(Object.keys(service))
-                service.characteristics().then(characteristics => {
-                  // console.log("service.characteristics")
-                    // console.log(c)
-                    // characteristics.push(c)
-                    // console.log(characteristics)
-                    data_services[service.uuid] = {
-                      name: service.name,
-                      uuid: service.uuid,
-                      characteristics: characteristics
-                    }
-                    resolve(data_services)
-                    // if (i === services.length - 1) {
-                    //     const temp = characteristics.reduce(
-                    //         (acc, current) => {
-                    //             return [...acc, ...current]
-                    //         },
-                    //         []
-                    //     )
-                    //     const dialog = temp.find(
-                    //         characteristic =>
-                    //             characteristic.isWritableWithoutResponse
-                    //     )
-                    //     if (!dialog) {
-                    //         reject('No writable characteristic')
-                    //     }
-                    //     resolve(dialog)
-                    // }
-                  
-                })
-            });
-            
-        })
-    })
-}
-
   const connectDevice = async (id) => {
-    try{
+    try {
       const resultConnect = await bleManager.connectToDevice(id);
       console.log(resultConnect);
     }
-    catch(error){
+    catch (error) {
       console.error(error);
     }
   }
@@ -135,22 +78,27 @@ const Home = ({ navigation }) => {
       style={styles.container}
     >
       <Header
-        titleText='JoCy Connect'
+        titleText='JoCy connect'
         existRightComponent={
           {
-            onPress: onScanDevices,
+            props: {
+              onPress: onScanDevices,
+              disabled: bleState !== "PoweredOn"
+            },
             title: titleAction
           }
         }
       />
 
-      {textNotification && <SnackbarComponent
-        text={textNotification}
-        customStyles={{
-          backgroundColor: '#F16043',
-          color: 'white'
-        }}
-      />}
+      {bleState !== "Unknown" && bleState !== "PoweredOn" && 
+        <SnackbarComponent
+          text={BleStateErrors[bleState]}
+          customStyles={{
+            backgroundColor: '#F16043',
+            color: 'white'
+          }}
+        />
+      }
 
       <AllDevices
         dataDevices={dataDevices}
