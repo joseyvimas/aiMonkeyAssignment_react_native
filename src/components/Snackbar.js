@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button, Snackbar } from 'react-native-paper';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { Snackbar } from 'react-native-paper';
 import PropTypes from 'prop-types';
 
 const SnackbarComponent = ({ text, action, customStyles }) => {
@@ -18,13 +18,6 @@ const SnackbarComponent = ({ text, action, customStyles }) => {
     </Snackbar>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-});
 
 SnackbarComponent.propTypes = {
   text: PropTypes.string.isRequired,

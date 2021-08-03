@@ -37,7 +37,7 @@ const AllDevices = ({ dataDevices, connectDevice }) => {
                                                 onPress={() => connectDevice(item.id)}
                                                 style={styles.arrowDetail}
                                             >
-                                                <Text style={{ color: "white" }}>CONNECT</Text>
+                                                <Text style={{ color: 'white' }}>CONNECT</Text>
                                                 <List.Icon {...props} icon='chevron-right' />
                                             </TouchableOpacity>
                                         }
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     devices: {
         paddingHorizontal: 15,
         marginTop: 25,
-        marginBottom: 25,
+        marginBottom: 25
     },
     listItem: {
         borderColor: 'gray',
@@ -86,9 +86,7 @@ const styles = StyleSheet.create({
         padding: 5
     },
     listTitle: {
-        fontSize: 15,
-        // borderRadius: 20,
-        // borderColor: 'white'
+        fontSize: 15
     },
     noDevices: {
         flexDirection: 'column',
@@ -98,11 +96,7 @@ const styles = StyleSheet.create({
     },
     arrowDetail: {
         flexDirection: 'row',
-        // borderColor: 'gray',
-        // borderWidth: 1,
-        // borderRadius: 15,
         alignItems: 'center',
-        justifyContent: 'center',
-        // backgroundColor: '#133ebf'
+        justifyContent: 'center'
     }
 });

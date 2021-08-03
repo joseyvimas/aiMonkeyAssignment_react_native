@@ -4,8 +4,7 @@ import {
     StyleSheet,
     Text,
     View,
-    FlatList,
-    TouchableOpacity
+    FlatList
 } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -19,7 +18,7 @@ const ShowLogs = ({ dataLogs }) => {
         <>
             {dataLogs.length > 0 ?
                 (
-                    <View style={styles.devices}>
+                    <View style={styles.logs}>
                         <Text style={{ fontSize: 16, marginBottom: 10 }}>
                             All Logs
                         </Text>
@@ -63,7 +62,7 @@ ShowLogs.propTypes = {
 export default ShowLogs;
 
 const styles = StyleSheet.create({
-    devices: {
+    logs: {
         paddingHorizontal: 15,
         marginTop: 25,
         marginBottom: 25,
@@ -76,9 +75,7 @@ const styles = StyleSheet.create({
         padding: 5
     },
     listTitle: {
-        fontSize: 15,
-        // borderRadius: 20,
-        // borderColor: 'white'
+        fontSize: 15
     },
      noLogs: {
         flexDirection: 'column',

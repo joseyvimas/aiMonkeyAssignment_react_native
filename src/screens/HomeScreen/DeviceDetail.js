@@ -75,19 +75,14 @@ const Home = ({ navigation }) => {
         }
       />
 
-      {textNotification && <SnackbarComponent
-        text={textNotification}
-        // action={{
-        //   label: 'ENABLE',
-        //   onPress: () => {
-        //     setBluetooth(true)
-        //   }
-        // }}
-        customStyles={{
-          backgroundColor: '#F16043',
-          color: 'white'
-        }}
-      />}
+      {textNotification &&
+        <SnackbarComponent
+          text={textNotification}
+          customStyles={{
+            backgroundColor: '#F16043',
+            color: 'white'
+          }}
+        />}
 
       {dataDevices.length > 0 ?
         (
@@ -99,7 +94,6 @@ const Home = ({ navigation }) => {
               data={dataDevices}
               renderItem={({ item }) => (
                 <List.Item
-                  // onPress={() => { }}
                   title={item.name}
                   description={item.id}
                   titleStyle={styles.listTitle}

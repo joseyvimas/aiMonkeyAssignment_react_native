@@ -10,7 +10,6 @@ import { Platform, PermissionsAndroid } from 'react-native';
 
 import { BleManager } from 'react-native-ble-plx';
 
-import Home from '../screens/HomeScreen/Home';
 import TabNavigation from './TabNavigation';
 
 const Stack = createStackNavigator();
@@ -70,9 +69,8 @@ function StackNavigator() {
                 <Stack.Screen name='Root' component={TabNavigation} />
                 {/* <Stack.Screen name='Home' component={Home} /> */}
             </Stack.Navigator >
-
-            {/* <TabNavigatison /> */}
         </NavigationContainer>
     )
 }
+
 export default StackNavigator;

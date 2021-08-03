@@ -88,7 +88,7 @@ const Home = ({ navigation }) => {
         // }}
         titleText='JoCy connect'
         rightComponent={() => {
-          if (bleState === "PoweredOn") {
+          if (bleState === 'PoweredOn') {
             return {
               props: {
                 onPress: onScanDevices
@@ -99,7 +99,7 @@ const Home = ({ navigation }) => {
         }}
       />
 
-      {bleState !== "Unknown" && bleState !== "PoweredOn" &&
+      {bleState !== 'Unknown' && bleState !== 'PoweredOn' &&
         <SnackbarComponent
           text={BleStateErrors[bleState]}
           customStyles={{
@@ -122,27 +122,6 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  buttonStyle: {
-    width: '75%',
-    height: 50,
-    backgroundColor: '#133ebf',
-    borderRadius: 50,
-    alignSelf: 'center',
-  },
-  devices: {
-    paddingHorizontal: 15,
-    marginTop: 25,
-    marginBottom: 25,
-  },
-  listTitle: {
-    fontSize: 15
-  },
-  noDevices: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
+    backgroundColor: '#fff'
   }
 });

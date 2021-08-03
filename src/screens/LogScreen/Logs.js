@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,7 +27,7 @@ function Logs() {
                         props: {
                             onPress: () => clearDispatch()
                         },
-                        title: "CLEAR LOGS"
+                        title: 'CLEAR LOGS'
                     }
                 }}
             />
