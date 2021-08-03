@@ -74,18 +74,23 @@ const Home = ({ navigation }) => {
       console.error(error);
     }
   }
-  
 
+  const refreshData = () => {
+    if(titleAction === 'SCAN'){
+      onScanDevices();
+    }
+    else {
+      setDataDevices([]);
+    }
+
+  }
+  
   return (
     <View
       style={styles.container}
     >
       <Header
-        // leftComponent={() => {
-        //   return {
-            
-        //   }
-        // }}
+
         titleText='JoCy connect'
         rightComponent={() => {
           if (bleState === 'PoweredOn') {
@@ -112,6 +117,7 @@ const Home = ({ navigation }) => {
       <AllDevices
         dataDevices={dataDevices}
         connectDevice={connectDevice}
+        refreshData={refreshData}
       />
     </View>
   );

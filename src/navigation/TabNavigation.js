@@ -68,7 +68,7 @@ const TabNavigation = () => {
                     ),
                     tabBarIcon: ({ focused }) => (
                         <Feather
-                            name='book-open'
+                            name='file-text'
                             size={24}
                             focused={focused}
                             color={focused ? '#133ebf' : 'white'}

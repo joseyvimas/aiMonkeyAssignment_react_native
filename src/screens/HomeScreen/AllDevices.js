@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import {
     StyleSheet,
     Text,
     View,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    RefreshControl
 } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -14,7 +15,17 @@ import { List } from 'react-native-paper';
 
 import PropTypes from 'prop-types';
 
-const AllDevices = ({ dataDevices, connectDevice }) => {
+const AllDevices = ({ dataDevices, connectDevice, refreshData }) => {
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await refreshData();
+        setTimeout(async () => {
+            setRefreshing(false);
+        }, 2000);
+    }
+
     return (
         <>
             {dataDevices.length > 0 ?
@@ -24,6 +35,12 @@ const AllDevices = ({ dataDevices, connectDevice }) => {
                             All devices
                         </Text>
                         <FlatList
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={onRefresh}
+                                />
+                            }
                             data={dataDevices}
                             renderItem={({ item }) => (
                                 <View style={styles.listItem}>
@@ -67,7 +84,8 @@ const AllDevices = ({ dataDevices, connectDevice }) => {
 
 AllDevices.propTypes = {
     dataDevices: PropTypes.array.isRequired,
-    connectDevice: PropTypes.func.isRequired
+    connectDevice: PropTypes.func.isRequired,
+    refreshData: PropTypes.func.isRequired
 };
 
 export default AllDevices;
