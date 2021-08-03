@@ -64,18 +64,6 @@ const Home = ({ route, navigation }) => {
     }
   }
 
-  // useEffect(() => {
-  //   const backHandler = BackHandler.addEventListener(
-  //     "hardwareBackPress",
-  //     disconnectDevice
-  //   );
-
-  //   return () => {
-  //     backHandler.remove();
-  //   }
-  // }, [device]);
-
-
   return (
     <View
       style={styles.container}
