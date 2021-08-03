@@ -45,8 +45,11 @@ const Home = ({ route, navigation }) => {
         navigation.goBack();
       }
     }
-    if(!device) connectDevice();
+    connectDevice();
+  }, []);
 
+  useEffect(() => {
+    //Return gesture
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       disconnectDevice
@@ -55,12 +58,13 @@ const Home = ({ route, navigation }) => {
     return () => {
       backHandler.remove();
     }
-  }, []);
+  }, [device]);
 
   const disconnectDevice = () => {
     if (device) {
       device.cancelConnection();
       navigation.goBack();
+      return true;
     }
   }
 
