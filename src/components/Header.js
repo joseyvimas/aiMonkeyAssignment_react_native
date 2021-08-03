@@ -5,7 +5,7 @@ import { Header } from 'react-native-elements';
 
 import Feather from 'react-native-vector-icons/Feather';
 
-const HeaderComponent = ({ titleText, navigation, rightComponent }) => {
+const HeaderComponent = ({ titleText, leftComponent, rightComponent }) => {
   if(rightComponent) rightComponent = rightComponent();
   
   return (
@@ -15,10 +15,10 @@ const HeaderComponent = ({ titleText, navigation, rightComponent }) => {
         backgroundColor='#133ebf'
         containerStyle={styles.headerContainer}
         leftComponent={() => {
-          if (navigation) {
+          if (leftComponent) {
             return (
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Feather name='arrow-left' size={25} color='#000' />
+              <TouchableOpacity {...leftComponent.props}>
+                {leftComponent.title}
               </TouchableOpacity>
             )
           }
@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
 
 HeaderComponent.propTypes = {
   titleText: PropTypes.string.isRequired,
-  navigation: PropTypes.func,
-  existRightComponent: PropTypes.func
+  leftComponent: PropTypes.object,
+  rightComponent: PropTypes.func
 };
 
 export default HeaderComponent;

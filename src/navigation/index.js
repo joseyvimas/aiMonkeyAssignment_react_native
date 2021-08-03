@@ -1,7 +1,4 @@
-import React, { useEffect } from 'react';
-
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React, { useEffect, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../redux/ducks/index';
@@ -10,13 +7,14 @@ import { Platform, PermissionsAndroid } from 'react-native';
 
 import { BleManager } from 'react-native-ble-plx';
 
-import TabNavigation from './TabNavigation';
+import AnimatedSplash from "react-native-animated-splash-screen";
 
-const Stack = createStackNavigator();
+import NavigationContainer from './NavigationContainer';
 
 function StackNavigator() {
+    const [isLoaded, setLoaded] = useState(false);
+    
     /*Redux*/
-    const state = useSelector(state => state);
     const dispatch = useDispatch();
 
     const { setBleManager, bleStateUpdated } = actions;
@@ -33,9 +31,12 @@ function StackNavigator() {
             //Set state with Redux
             bleStateUpdatedDispatch(state);
         }, true);
+        
+        const timer = setTimeout(() => setLoaded(true), 2000);
 
         return () => {
             subscription.remove();
+            clearTimeout(timer);
         };
     }, []);
 
@@ -59,17 +60,17 @@ function StackNavigator() {
     }
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator
-                screenOptions={{
-                    headerShown: false
-                }}
-            >
-                {/* <Stack.Screen name='Splash' component={Splash} /> */}
-                <Stack.Screen name='Root' component={TabNavigation} />
-                {/* <Stack.Screen name='Home' component={Home} /> */}
-            </Stack.Navigator >
-        </NavigationContainer>
+        <AnimatedSplash
+            // translucent={true}
+            isLoaded={isLoaded}
+            logoImage={require('../../assets/splash.jpeg')}
+            backgroundColor={"white"}
+            logoHeight={1000}
+            logoWidth={1000}
+        >
+            <NavigationContainer />
+        </AnimatedSplash>
+
     )
 }
 

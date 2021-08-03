@@ -15,7 +15,7 @@ import { List } from 'react-native-paper';
 
 import PropTypes from 'prop-types';
 
-const AllDevices = ({ dataDevices, connectDevice, refreshData }) => {
+const AllDevices = ({ dataDevices, goToDeviceDetail, refreshData }) => {
     const [refreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = async () => {
@@ -51,7 +51,7 @@ const AllDevices = ({ dataDevices, connectDevice, refreshData }) => {
                                         left={props => <List.Icon {...props} icon='bluetooth' />}
                                         right={props =>
                                             <TouchableOpacity
-                                                onPress={() => connectDevice(item.id)}
+                                                onPress={() => goToDeviceDetail(item.id, item.name)}
                                                 style={styles.arrowDetail}
                                             >
                                                 <Text style={{ color: 'white' }}>CONNECT</Text>
@@ -84,7 +84,7 @@ const AllDevices = ({ dataDevices, connectDevice, refreshData }) => {
 
 AllDevices.propTypes = {
     dataDevices: PropTypes.array.isRequired,
-    connectDevice: PropTypes.func.isRequired,
+    goToDeviceDetail: PropTypes.func.isRequired,
     refreshData: PropTypes.func.isRequired
 };
 

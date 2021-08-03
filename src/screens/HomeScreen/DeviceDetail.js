@@ -1,94 +1,119 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   StyleSheet,
   Text,
   View,
   FlatList,
-  Platform,
-  PermissionsAndroid
+  ActivityIndicator,
+  BackHandler,
+  Alert
 } from 'react-native';
 
-import { BleManager } from 'react-native-ble-plx';
+import { useSelector, useDispatch } from 'react-redux';
+import { actions } from '../../redux/ducks';
 
 import Feather from 'react-native-vector-icons/Feather';
 
 import { List } from 'react-native-paper';
 
 import Header from '../../components/Header';
-import SnackbarComponent from '../../components/Snackbar';
 
-const Home = ({ navigation }) => {
-  const [bleManager, setBleManager] = useState(null);
-  const [titleAction, setTitleAction] = useState('SCAN');
-  const [dataDevices, setDataDevices] = useState([]);
-  const [textNotification, setTextNotification] = useState(null);
+const Home = ({ route, navigation }) => {
+  const { id_device, name_device } = route.params;
+  const [device, setDevice] = useState(null);
+  const [showActivity, setActivity] = useState(true);
+  const [servicesData, setServicesData] = useState([]);
+
+  /*Redux*/
+  const { bleManager, bleState, logs } = useSelector(state => state);
+  const dispatch = useDispatch();
+
+  const { scanErrors } = actions;
+  const scanErrorsDispatch = (error) => dispatch(scanErrors(error));
+  /*Redux*/
 
   useEffect(() => {
+    const connectDevice = async () => {
+      try {
+        const device = await bleManager.connectToDevice(id_device);
+        setDevice(device);
+        setActivity(false);
+      }
+      catch (error) {
+        console.error(error);
+        navigation.goBack();
+      }
+    }
+    if(!device) connectDevice();
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      disconnectDevice
+    );
+
+    return () => {
+      backHandler.remove();
+    }
   }, []);
 
-  const onScanDevices = async () => {
-    setTextNotification(null);
-    if (titleAction === 'SCAN') {
-      const data_devices = {};
-      setTitleAction('STOP SCANNING');
-      bleManager.startDeviceScan(null, null, (error, device) => {
-        if (null) {
-          setDataDevices([]);
-          console.log('null');
-        }
-        if (error) {
-          console.log('error', error.message);
-          setDataDevices([]);
-          setTextNotification(error.message);
-          setTitleAction('SCAN');
-          bleManager.stopDeviceScan();
-          return;
-        }
-        data_devices[device.id] = {
-          id: device['id'],
-          name: device['name'],
-          id_services: device['serviceUUIDs'],
-          isConnectable: device['isConnectable']
-        }
-        setDataDevices(Object.values(data_devices));
-      });
-
-    }
-    else {
-      setTitleAction('SCAN');
-      bleManager.stopDeviceScan();
+  const disconnectDevice = () => {
+    if (device) {
+      device.cancelConnection();
+      navigation.goBack();
     }
   }
+
+  // useEffect(() => {
+  //   const backHandler = BackHandler.addEventListener(
+  //     "hardwareBackPress",
+  //     disconnectDevice
+  //   );
+
+  //   return () => {
+  //     backHandler.remove();
+  //   }
+  // }, [device]);
+
 
   return (
     <View
       style={styles.container}
     >
       <Header
-        titleText='JoCy Connect'
-        existRightComponent={
-          {
-            onPress: onScanDevices,
-            title: titleAction
+        titleText={name_device}
+        leftComponent={{
+          props: {
+            onPress: disconnectDevice
+          },
+          title: <Feather name='arrow-left' size={25} color='#000' />
+        }}
+        rightComponent={() => {
+          if (device) {
+            return {
+              props: {
+                onPress: disconnectDevice
+              },
+              title: 'DISCONNECT'
+            }
           }
-        }
+        }}
       />
 
-      {textNotification &&
+      {/* {textNotification &&
         <SnackbarComponent
           text={textNotification}
           customStyles={{
             backgroundColor: '#F16043',
             color: 'white'
           }}
-        />}
+        />} */}
 
-      {dataDevices.length > 0 ?
+      {servicesData.length > 0 ?
         (
-          <View style={styles.devices}>
+          <View style={styles.devideDetails}>
             <Text style={{ fontSize: 16, marginBottom: 10 }}>
-              All devices
+              All Services
             </Text>
             <FlatList
               data={dataDevices}
@@ -97,7 +122,7 @@ const Home = ({ navigation }) => {
                   title={item.name}
                   description={item.id}
                   titleStyle={styles.listTitle}
-                  left={props => <List.Icon {...props} icon='bluetooth' />}
+                  left={props => <List.Icon {...props} icon='services' />}
                   right={props => <List.Icon {...props} icon='connect' />}
                 />
               )}
@@ -106,15 +131,8 @@ const Home = ({ navigation }) => {
           </View>
         ) :
         (
-          <View style={styles.noDevices}>
-            <Feather
-              name='bluetooth'
-              size={60}
-              color='gray'
-            />
-            <Text style={{ marginTop: 10, fontSize: 22, color: 'gray' }}>
-              No devices found.
-            </Text>
+          <View style={styles.loading}>
+            <ActivityIndicator animating={showActivity} size='large' color='gray' />
           </View>
         )
       }
@@ -129,18 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  buttonContainerStyle: {
-    marginTop: 25,
-    marginBottom: 25
-  },
-  buttonStyle: {
-    width: '75%',
-    height: 50,
-    backgroundColor: '#133ebf',
-    borderRadius: 50,
-    alignSelf: 'center',
-  },
-  devices: {
+  devideDetails: {
     paddingHorizontal: 15,
     marginTop: 25,
     marginBottom: 25,
@@ -148,7 +155,7 @@ const styles = StyleSheet.create({
   listTitle: {
     fontSize: 15
   },
-  noDevices: {
+  loading: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
