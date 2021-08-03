@@ -3,8 +3,6 @@ import { StyleSheet, TouchableOpacity, Text, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
 import { Header } from 'react-native-elements';
 
-import Feather from 'react-native-vector-icons/Feather';
-
 const HeaderComponent = ({ titleText, leftComponent, rightComponent }) => {
   if(rightComponent) rightComponent = rightComponent();
   
