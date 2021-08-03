@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../redux/ducks/index';
@@ -9,7 +10,8 @@ import { Platform, PermissionsAndroid } from 'react-native';
 
 import { BleManager } from 'react-native-ble-plx';
 
-import Home from '../screens/Home';
+import Home from '../screens/HomeScreen/Home';
+import TabNavigation from './TabNavigation';
 
 const Stack = createStackNavigator();
 
@@ -64,9 +66,12 @@ function StackNavigator() {
                     headerShown: false
                 }}
             >
-                {/* <Stack.Screen name="Splash" component={Splash} /> */}
-                <Stack.Screen name="Home" component={Home} />
+                {/* <Stack.Screen name='Splash' component={Splash} /> */}
+                <Stack.Screen name='Root' component={TabNavigation} />
+                {/* <Stack.Screen name='Home' component={Home} /> */}
             </Stack.Navigator >
+
+            {/* <TabNavigatison /> */}
         </NavigationContainer>
     )
 }

@@ -1,5 +1,6 @@
 import { State } from 'react-native-ble-plx';
 import { formatCurrentDate } from '../../#services/Dates';
+import { getRandomId } from '../../#services/Helpers';
 
 //Actions Type
 const SET_BLE_MANAGER = 'SET_BLE_MANAGER';
@@ -36,6 +37,7 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         logs: [{
+          id: getRandomId(),
           text: 'Scan error: ' + action.error,
           date: formatCurrentDate()
         }, ...state.logs]
@@ -46,6 +48,7 @@ function reducer(state = initialState, action) {
         ...state,
         connectionState: action.state,
         logs: [{
+          id: getRandomId(),
           text: 'Connection state changed: ' + action.state,
           date: formatCurrentDate()
         }, ...state.logs]
@@ -56,6 +59,7 @@ function reducer(state = initialState, action) {
         ...state,
         bleState: action.state,
         logs: [{
+          id: getRandomId(),
           text: 'BLE state changed: ' + action.state,
           date: formatCurrentDate()
         }, ...state.logs]

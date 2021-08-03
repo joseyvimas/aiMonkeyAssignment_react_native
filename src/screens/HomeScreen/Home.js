@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import { StyleSheet, View } from 'react-native';
 
-import Header from '../components/Header';
-import SnackbarComponent from '../components/Snackbar';
-import AllDevices from './AllDevices';
-
 import { useSelector, useDispatch } from 'react-redux';
-import { actions } from '../redux/ducks/index';
+import { actions } from '../../redux/ducks/index';
 
-import { BleStateErrors } from '../constants/BleStateErrors';
+import { BleStateErrors } from '../../constants/BleStateErrors';
+
+import Header from '../../components/Header';
+import SnackbarComponent from '../../components/Snackbar';
+
+import AllDevices from './AllDevices';
 
 const Home = ({ navigation }) => {
   const [titleAction, setTitleAction] = useState('SCAN');
@@ -73,6 +74,7 @@ const Home = ({ navigation }) => {
       console.error(error);
     }
   }
+  
 
   return (
     <View
@@ -121,10 +123,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  buttonContainerStyle: {
-    marginTop: 25,
-    marginBottom: 25
   },
   buttonStyle: {
     width: '75%',

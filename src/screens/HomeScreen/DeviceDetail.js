@@ -15,8 +15,8 @@ import Feather from 'react-native-vector-icons/Feather';
 
 import { List } from 'react-native-paper';
 
-import Header from '../components/Header';
-import SnackbarComponent from '../components/Snackbar';
+import Header from '../../components/Header';
+import SnackbarComponent from '../../components/Snackbar';
 
 const Home = ({ navigation }) => {
   const [bleManager, setBleManager] = useState(null);

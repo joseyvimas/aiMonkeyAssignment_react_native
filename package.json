@@ -7,6 +7,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.0.0",
     "@react-navigation/native": "^6.0.0",
     "@react-navigation/stack": "^6.0.0",
     "expo": "~42.0.1",
@@ -30,7 +31,8 @@
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
     "react-redux": "^7.2.4",
-    "redux": "^4.1.0"
+    "redux": "^4.1.0",
+    "uuidv4": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
