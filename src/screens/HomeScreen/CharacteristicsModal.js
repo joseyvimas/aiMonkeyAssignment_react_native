@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
+import { Modal, StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { List } from 'react-native-paper';
@@ -9,7 +9,7 @@ import Feather from 'react-native-vector-icons/Feather';
 const CharacteristicsModal = ({ dataService, setModalData }) => {
     return (
         <Modal
-            animationType="slide"
+            animationType='slide'
             transparent={true}
             visible={true}
             onRequestClose={() => {
@@ -56,8 +56,8 @@ export default CharacteristicsModal;
 const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 22
     },
     titleService: {
@@ -71,12 +71,12 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        width: "80%",
-        height: "auto",
-        backgroundColor: "#133ebf",
+        width: '80%',
+        height: 'auto',
+        backgroundColor: '#133ebf',
         borderRadius: 20,
         padding: 35,
-        shadowColor: "white",
+        shadowColor: 'white',
         shadowOffset: {
             width: 0,
             height: 2

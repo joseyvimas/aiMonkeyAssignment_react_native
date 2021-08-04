@@ -56,13 +56,13 @@ const Home = ({ route, navigation }) => {
         const promises = [];
         let promiseCharacteristics, primaryService = null;
         await asyncForEach(services, (service, key) => {
-          primaryService = service.isPrimary ? "PRIMARY SERVICE":null;
+          primaryService = service.isPrimary ? 'PRIMARY SERVICE':null;
           data_services = {
             uuid: service.uuid,
             name: BluetoothUUID[service.uuid] ? BluetoothUUID[service.uuid] : 'Unknow',
             id: service.id,
             isPrimary: service.isPrimary,
-            description: "UUID: " + service.uuid + "\n"+primaryService,
+            description: 'UUID: ' + service.uuid + '\n'+primaryService,
             characteristics: []
           }
           promiseCharacteristics = getCharacteristicsForService({ device, data_services, uuid_service: service.uuid });
@@ -87,16 +87,16 @@ const Home = ({ route, navigation }) => {
       const len_properties = key_properties.length;
       let properties, i;
       characteristics.forEach(async characteristic => {
-        properties = "";
+        properties = '';
         for(i=0; i<len_properties; i++){
-          if(characteristic[key_properties[i]]) properties += CharacteristicsProperties[key_properties[i]]+", ";
+          if(characteristic[key_properties[i]]) properties += CharacteristicsProperties[key_properties[i]]+', ';
         }
-        if(properties.substr(properties.length - 2) === ", ") properties = properties.slice(0, -2);
+        if(properties.substr(properties.length - 2) === ', ') properties = properties.slice(0, -2);
         data_services.characteristics.push({
           uuid: characteristic.uuid,
           id: characteristic.id,
           name: BluetoothUUID[characteristic.uuid] ? BluetoothUUID[characteristic.uuid] : 'Unknow',
-          description: "UUID: " + characteristic.uuid + "\nProperties: " + properties,
+          description: 'UUID: ' + characteristic.uuid + '\nProperties: ' + properties,
           properties
         });
       });

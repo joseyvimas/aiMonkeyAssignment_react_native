@@ -7,7 +7,7 @@ import { Platform, PermissionsAndroid } from 'react-native';
 
 import { BleManager } from 'react-native-ble-plx';
 
-import AnimatedSplash from "react-native-animated-splash-screen";
+import AnimatedSplash from 'react-native-animated-splash-screen';
 
 import NavigationContainer from './NavigationContainer';
 
@@ -63,7 +63,7 @@ function StackNavigator() {
             translucent={true}
             isLoaded={isLoaded}
             logoImage={require('../../assets/logoJoCy.png')}
-            backgroundColor={"#133ebf"}
+            backgroundColor={'#133ebf'}
             logoHeight={200}
             logoWidth={200}
         >
