@@ -4,11 +4,9 @@
     "slug": "aiMonkeyAssignment_react_native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconJoCy.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#133ebf"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/iconJoCy.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.jocy.aiMonkeyAssignment_react_native"

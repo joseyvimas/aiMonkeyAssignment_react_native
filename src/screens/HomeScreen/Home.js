@@ -12,8 +12,6 @@ import SnackbarComponent from '../../components/Snackbar';
 
 import AllDevices from './AllDevices';
 
-import { asyncForEach } from '../../#services/Helpers';
-
 const Home = ({ navigation }) => {
   const [titleAction, setTitleAction] = useState('SCAN');
   const [dataDevices, setDataDevices] = useState([]);
@@ -39,10 +37,10 @@ const Home = ({ navigation }) => {
       bleManager.startDeviceScan(null, null, (error, device) => {
         if (null) {
           setDataDevices([]);
-          console.log('null');
+          // console.log('null');
         }
         if (error) {
-          console.log('error', error.message);
+          // console.log('error', error.message);
           scanErrorsDispatch(error.message); //Save scan error with Redux
           setDataDevices([]);
           setTitleAction('SCAN');
@@ -67,76 +65,9 @@ const Home = ({ navigation }) => {
     }
   }
 
-  const getServicesAndCharacteristics = (device) => {
-    return new Promise((resolve, reject) => {
-      device.services().then(services => {
-        const characteristics = []
-
-        services.forEach((service, i) => {
-          service.characteristics().then(c => {
-            characteristics.push(c)
-
-            if (i === services.length - 1) {
-              const temp = characteristics.reduce(
-                (acc, current) => {
-                  return [...acc, ...current]
-                },
-                []
-              )
-              const dialog = temp.find(
-                characteristic =>
-                  characteristic.isWritableWithoutResponse
-              )
-              if (!dialog) {
-                reject('No writable characteristic')
-              }
-              resolve(dialog)
-            }
-          })
-        })
-      })
-    })
-  }
-
-  const goToDeviceDetail = async (id_device, name_device) => {
-    try {
-      // const device = await bleManager.connectToDevice(id);
-      // delete device._manager;
-      navigation.navigate("DeviceDetail", { id_device, name_device });
-      // await device.discoverAllServicesAndCharacteristics(id);
-    
-      // const services = await device.services();
-      // console.log(Object.keys(services[0]))
-      // const data_services = {};
-
-
-
-      // await asyncForEach(services, (service, key) => {
-      //   promiseUsers = getDataUserAndNewMessages({
-      //     id_user: data_payment.fullData.user_id,
-      //     data_payment
-      //   });
-      //   promises.push(promiseUsers);
-      // });
-      // const [...full_data_payments] = await Promise.all(promises);
-
-      // services.forEach(async service => {
-      //   const characteristics = await device.characteristicsForService(service.uuid);
-      //   // data_services[service.uuid] = {
-      //   //   uuuid: service.uuid,
-      //   //   id: service.id,
-      //   //   isPrimary: service.isPrimary,
-      //   //   // characteristics
-      //   // }
-      //   characteristics.forEach((c) => console.log(c.value));
-      // });
-      // console.log(data_services)
-      // console.log(Object.keys(services));
-      // resultConnect.cancelConnection();
-    }
-    catch (error) {
-      console.error(error);
-    }
+  const goToDeviceDetail = ({ id_device, name_device }) => {
+    navigation.navigate('DeviceDetail', { id_device, name_device });
+    onScanDevices();
   }
 
   const refreshData = () => {

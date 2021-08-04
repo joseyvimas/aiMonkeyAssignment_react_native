@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import {
     StyleSheet,
@@ -51,7 +51,16 @@ const AllDevices = ({ dataDevices, goToDeviceDetail, refreshData }) => {
                                         left={props => <List.Icon {...props} icon='bluetooth' />}
                                         right={props =>
                                             <TouchableOpacity
-                                                onPress={() => goToDeviceDetail(item.id, item.name)}
+                                                onPress={() => {
+                                                    const name_device = item.name;
+                                                    //Verifying that the name exists
+                                                    if (!name_device) name_device = 'Unknown';
+
+                                                    goToDeviceDetail({
+                                                        id_device: item.id,
+                                                        name_device
+                                                    });
+                                                }}
                                                 style={styles.arrowDetail}
                                             >
                                                 <Text style={{ color: 'white' }}>CONNECT</Text>
@@ -104,6 +113,7 @@ const styles = StyleSheet.create({
         padding: 5
     },
     listTitle: {
+        fontWeight: 'bold',
         fontSize: 15
     },
     noDevices: {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { actions } from '../redux/ducks/index';
 
 import { Platform, PermissionsAndroid } from 'react-native';
@@ -31,7 +31,6 @@ function StackNavigator() {
             //Set state with Redux
             bleStateUpdatedDispatch(state);
         }, true);
-        
         const timer = setTimeout(() => setLoaded(true), 2000);
 
         return () => {
@@ -44,14 +43,14 @@ function StackNavigator() {
         if (Platform.OS === 'android' && Platform.Version >= 23) {
             PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
                 if (result) {
-                    console.log('Permission is OK');
+                    // console.log('Permission is OK');
                     // this.retrieveConnected()
                 } else {
                     PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
                         if (result) {
-                            console.log('User accept');
+                            // console.log('User accept');
                         } else {
-                            console.log('User refuse');
+                            // console.log('User refuse');
                         }
                     });
                 }
@@ -61,12 +60,12 @@ function StackNavigator() {
 
     return (
         <AnimatedSplash
-            // translucent={true}
+            translucent={true}
             isLoaded={isLoaded}
-            logoImage={require('../../assets/splash.jpeg')}
-            backgroundColor={"white"}
-            logoHeight={1000}
-            logoWidth={1000}
+            logoImage={require('../../assets/logoJoCy.png')}
+            backgroundColor={"#133ebf"}
+            logoHeight={200}
+            logoWidth={200}
         >
             <NavigationContainer />
         </AnimatedSplash>

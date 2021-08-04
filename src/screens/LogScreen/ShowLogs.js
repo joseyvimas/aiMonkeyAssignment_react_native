@@ -27,6 +27,7 @@ const ShowLogs = ({ dataLogs }) => {
                             renderItem={({ item }) => (
                                 <View style={styles.listItem}>
                                     <List.Item
+                                        titleNumberOfLines={3}
                                         title={item.text}
                                         description={item.date}
                                         titleStyle={styles.listTitle}
@@ -63,6 +64,7 @@ export default ShowLogs;
 
 const styles = StyleSheet.create({
     logs: {
+        flex: 1,
         paddingHorizontal: 15,
         marginTop: 25,
         marginBottom: 25,
@@ -75,9 +77,10 @@ const styles = StyleSheet.create({
         padding: 5
     },
     listTitle: {
+        fontWeight: 'bold',
         fontSize: 15
     },
-     noLogs: {
+    noLogs: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
